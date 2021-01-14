@@ -1,0 +1,40 @@
+---
+title: "Day 1"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+interp <- llr::llr_env$new()
+knitr::knit_engines$set(clojure = llr::knitr_language_engine(interp))
+```
+
+## Task 1
+
+```{clojure}
+(def numbers (r/as.integer (r/readLines "input.txt")))
+(def map2 (fn [f x y] (r/purrr::map2 x y f)))
+(def combs (r/expand.grid :a numbers :b numbers))
+(def res 
+  (first (->> 
+    (map2 (fn [a b] [a b (+ a b)]) (r/$ combs a) (r/$ combs b))
+    (filter (fn [x] (= (get x 3) 2020))))))
+res
+```
+```{clojure}
+(* (get res 1) (get res 2))
+```
+
+
+## Task 2
+
+With dplyr
+
+```{clojure}
+(-> 
+ (r/expand.grid :a numbers :b numbers :c numbers)
+ (r/dplyr::filter (r/== (r/+ (r/+ a b) c) 2020))
+ (r/dplyr::mutate :result (r/* (r/* a b) c))
+ (r/head 1))
+```
+
