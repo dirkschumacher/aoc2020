@@ -8,7 +8,7 @@ Day 3
 (def char-at (fn [str i] (r/substr str i i)))
 (def line-length (count data))
 (def line-at (fn [i] (get data i)))
-(def line-width (nchar (get data 1)))
+(def line-width (r/nchar (get data 1)))
 (defn find-trees [down right]
   (loop [i (+ 1 down) j (+ 1 right) n-trees (r/as.numeric 0)] ; 32 bit integers :)
     (if (> i line-length) n-trees 
